@@ -28,6 +28,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 install(FILES
     include/numanuma.h
+    include/numanuma.hpp
     DESTINATION include
     COMPONENT devel
 )

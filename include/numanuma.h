@@ -45,7 +45,7 @@ extern "C" {
 
 /*!
  * Query the number of nodes on the current system.
- * \return number of nodes or -1 for zero
+ * \return number of nodes or -1 for error
  */
 extern NUMANUMA_API int numanuma__get_num_nodes(void);
 
@@ -80,20 +80,6 @@ extern NUMANUMA_API long long numanuma__get_mem_size(const int node);
  * \return -1 for error, 0 for success
  */
 extern NUMANUMA_API int numanuma__set_affinity(const int node);
-
-//thread scheduling
-
-//cpus per node
-
-//get my node
-
-//move thread to node
-
-//mem available
-
-//mem free
-
-//page size
 
 #ifdef __cplusplus
 }

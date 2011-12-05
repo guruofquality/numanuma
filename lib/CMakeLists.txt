@@ -32,6 +32,8 @@ elseif(HAVE_WINDOWS_H)
 
 endif()
 
+list(APPEND numanuma_sources cpp_wrapper.cpp)
+
 ########################################################################
 # Build the library
 ########################################################################
