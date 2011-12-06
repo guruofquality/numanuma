@@ -1,0 +1,18 @@
+########################################################################
+# NUMANUMA - A cross-platform NUMA API abstraction layer
+########################################################################
+
+Motivation:
+NUMA (non-uniform memory architecture) is coming, be prepared!
+I wrote this library to better understand the various NUMA APIs,
+and to make a useful cross-platform abstraction layer.
+This library aims to provide a cross platform access for
+
+- node comprehension: query system CPU and memory groupings
+- thread affinity: move threads to particular nodes
+- thread scheduling: alter the priority of a thread
+- memory allocation: allocate memory on a specific node
+
+Requirements:
+This library is implemented on top of libnuma and libpthread for linux,
+and standard windows.h stuff when building in MSVC.

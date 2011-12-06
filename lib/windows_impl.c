@@ -59,8 +59,29 @@ long long numanuma__get_mem_size(const int node){
     return -1;
 }
 
-int numanuma__set_affinity(const int node){
+int numanuma__set_thread_affinity(const int node){
     const DWORD_PTR mask = 1 << node;
     if (SetThreadAffinityMask(GetCurrentThread(), mask)) return 0;
+    return -1;
+}
+
+int numanuma__set_thread_priority(const double prio){
+    int thread_prio = THREAD_PRIORITY_NORMAL;
+
+    if (prio > 0){
+        if      (prio > +0.75) thread_prio = THREAD_PRIORITY_TIME_CRITICAL;
+        else if (prio > +0.50) thread_prio = THREAD_PRIORITY_HIGHEST;
+        else if (prio > +0.25) thread_prio = THREAD_PRIORITY_ABOVE_NORMAL;
+        else                   thread_prio = THREAD_PRIORITY_NORMAL;
+    }
+
+    else{
+        if      (prio < -0.75) thread_prio = THREAD_PRIORITY_IDLE;
+        else if (prio < -0.50) thread_prio = THREAD_PRIORITY_LOWEST;
+        else if (prio < -0.25) thread_prio = THREAD_PRIORITY_BELOW_NORMAL;
+        else                   thread_prio = THREAD_PRIORITY_NORMAL;
+    }
+
+    if (SetThreadPriority(GetCurrentThread(), thread_prio)) return 0;
     return -1;
 }

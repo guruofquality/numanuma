@@ -79,7 +79,15 @@ extern NUMANUMA_API long long numanuma__get_mem_size(const int node);
  * \param node the index of a node
  * \return -1 for error, 0 for success
  */
-extern NUMANUMA_API int numanuma__set_affinity(const int node);
+extern NUMANUMA_API int numanuma__set_thread_affinity(const int node);
+
+/*!
+ * Set the scheduling priority for the calling thread.
+ * A priority of zero is considered to be default.
+ * \param prio a priority between -1.0 and 1.0
+ * \return -1 for error, 0 for success
+ */
+extern NUMANUMA_API int numanuma__set_thread_priority(const double prio);
 
 #ifdef __cplusplus
 }

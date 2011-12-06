@@ -16,6 +16,7 @@
 
 #include <numanuma.h>
 #include <numa.h> //libnuma implementation
+#include <pthread.h>
 
 int numanuma__get_num_nodes(void){
     if (numa_available() == -1) return -1;
@@ -51,6 +52,17 @@ long long numanuma__get_mem_size(const int node){
     return numa_node_size64(node, NULL);
 }
 
-int numanuma__set_affinity(const int node){
+int numanuma__set_thread_affinity(const int node){
     return numa_run_on_node(node);
+}
+
+int numanuma__set_thread_priority(const double prio){
+    const int policy = (prio <= 0.0)? SCHED_OTHER : SCHED_RR;
+    const int min_pri = sched_get_priority_min(policy);
+    const int max_pri = sched_get_priority_max(policy);
+    if (min_pri == -1 || max_pri == -1) return -1;
+
+    struct sched_param sp;
+    sp.sched_priority = (int)(prio*(max_pri - min_pri)) + min_pri;
+    return pthread_setschedparam(pthread_self(), policy, &sp);
 }

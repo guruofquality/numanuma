@@ -35,7 +35,10 @@ namespace numanuma{
     NUMANUMA_API unsigned long long get_mem_size(const int node);
 
     //! Wrapper to set the caller thread's affinity
-    NUMANUMA_API void set_affinity(const int node);
+    NUMANUMA_API void set_thread_affinity(const int node);
+
+    //! Wrapper to set the caller thread's priority
+    NUMANUMA_API void set_thread_priority(const double prio);
 
 } //namespace numanuma
 

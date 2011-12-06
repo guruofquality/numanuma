@@ -19,9 +19,10 @@
 ########################################################################
 include(CheckIncludeFile)
 CHECK_INCLUDE_FILE(numa.h HAVE_NUMA_H)
+CHECK_INCLUDE_FILE(pthread.h HAVE_PTHREAD_H)
 CHECK_INCLUDE_FILE(windows.h HAVE_WINDOWS_H)
 
-if(HAVE_NUMA_H)
+if(HAVE_NUMA_H AND HAVE_PTHREAD_H)
 
     list(APPEND numanuma_sources libnuma_impl.c)
     list(APPEND numanuma_libs numa)

@@ -56,7 +56,12 @@ unsigned long long numanuma::get_mem_size(const int node){
     return ret;
 }
 
-void numanuma::set_affinity(const int node){
-    const int ret = numanuma__set_affinity(node);
-    if (ret == -1) throw std::runtime_error("numanuma::set_affinity fail");
+void numanuma::set_thread_affinity(const int node){
+    const int ret = numanuma__set_thread_affinity(node);
+    if (ret == -1) throw std::runtime_error("numanuma::set_thread_affinity fail");
+}
+
+void numanuma::set_thread_priority(const double prio){
+    const int ret = numanuma__set_thread_priority(prio);
+    if (ret == -1) throw std::runtime_error("numanuma::set_thread_priority fail");
 }
