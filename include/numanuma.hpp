@@ -22,24 +22,32 @@
 namespace numanuma{
 
     //! Wrapper to get the number of NUMA nodes
-    NUMANUMA_API size_t get_num_nodes(void);
+    size_t get_num_nodes(void);
 
     //! Wrapper to allocate and manage NUMA memory
-    struct NUMANUMA_API mem{
+    struct mem{
         static mem *make(const int node, const size_t size);
         virtual void *get(void) = 0;
         virtual size_t len(void) = 0;
     };
 
     //! Wrapper to get the available node memory
-    NUMANUMA_API unsigned long long get_mem_size(const int node);
+    unsigned long long get_mem_size(const int node);
 
     //! Wrapper to set the caller thread's affinity
-    NUMANUMA_API void set_thread_affinity(const int node);
+    void set_thread_affinity(const int node);
 
     //! Wrapper to set the caller thread's priority
-    NUMANUMA_API void set_thread_priority(const double prio);
+    void set_thread_priority(const double prio);
+
+    //! Wrapper to get the current time now in ticks
+    long long get_time_now(void);
+
+    //! Wrapper to get the number of ticks per second
+    long long get_time_tps(void);
 
 } //namespace numanuma
+
+#include <numanuma/cpp_impl.hpp>
 
 #endif /*INCLUDED_NUMANUMA_HPP*/

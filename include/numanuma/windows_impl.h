@@ -14,12 +14,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <numanuma.h>
-#include <windows.h> //windows implementation
+#ifndef INCLUDED_NUMANUMA_WINDOWS_IMPL_H
+#define INCLUDED_NUMANUMA_WINDOWS_IMPL_H
 
-int numanuma__get_num_nodes(void){
+#include <windows.h>
+
+__inline int numanuma__get_num_nodes(void){
     ULONG num;
-    if (GetNumaHighestNodeNumber(&num)) return num;
+    if (GetNumaHighestNodeNumber(&num)) return num + 1;
     return -1;
 }
 
@@ -29,7 +31,8 @@ struct numanuma__mem_t{
     size_t size;
 };
 
-void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp){
+__inline void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp){
+    #if _WIN32_WINNT >= 0x0600
     void *mem = VirtualAllocExNuma(
         GetCurrentProcess(),
         NULL,
@@ -46,26 +49,33 @@ void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handl
     (*hp)->mem = mem;
     (*hp)->size = size;
     return (*hp)->mem;
+    #else
+    return NULL;
+    #endif
 }
 
-void numanuma__mem_free(numanuma__mem_handle *hp){
-   VirtualFreeEx(GetCurrentProcess(), (*hp)->mem, (*hp)->size, MEM_RELEASE);
+__inline void numanuma__mem_free(numanuma__mem_handle *hp){
+   VirtualFree((*hp)->mem, (*hp)->size, MEM_RELEASE);
    free(*hp);
 }
 
-long long numanuma__get_mem_size(const int node){
+__inline long long numanuma__get_mem_size(const int node){
     ULONGLONG avail;
+    #if _WIN32_WINNT >= 0x0601
     if (GetNumaAvailableMemoryNodeEx(node, &avail)) return avail;
+    #else
+    if (GetNumaAvailableMemoryNode(node, &avail)) return avail;
+    #endif
     return -1;
 }
 
-int numanuma__set_thread_affinity(const int node){
+__inline int numanuma__set_thread_affinity(const int node){
     const DWORD_PTR mask = 1 << node;
     if (SetThreadAffinityMask(GetCurrentThread(), mask)) return 0;
     return -1;
 }
 
-int numanuma__set_thread_priority(const double prio){
+__inline int numanuma__set_thread_priority(const double prio){
     int thread_prio = THREAD_PRIORITY_NORMAL;
 
     if (prio > 0){
@@ -85,3 +95,17 @@ int numanuma__set_thread_priority(const double prio){
     if (SetThreadPriority(GetCurrentThread(), thread_prio)) return 0;
     return -1;
 }
+
+__inline long long numanuma__get_time_now(void){
+    LARGE_INTEGER counts;
+    QueryPerformanceCounter(&counts);
+    return counts.QuadPart;
+}
+
+__inline long long numanuma__get_time_tps(void){
+    LARGE_INTEGER freq;
+    QueryPerformanceFrequency(&freq);
+    return freq.QuadPart;
+}
+
+#endif /*INCLUDED_NUMANUMA_WINDOWS_IMPL_H*/

@@ -17,33 +17,25 @@
 ########################################################################
 # Check for support
 ########################################################################
-include(CheckIncludeFile)
-CHECK_INCLUDE_FILE(numa.h HAVE_NUMA_H)
-CHECK_INCLUDE_FILE(pthread.h HAVE_PTHREAD_H)
-CHECK_INCLUDE_FILE(windows.h HAVE_WINDOWS_H)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
-if(HAVE_NUMA_H AND HAVE_PTHREAD_H)
-
-    list(APPEND numanuma_sources libnuma_impl.c)
-    list(APPEND numanuma_libs numa)
-
-elseif(HAVE_WINDOWS_H)
-
-    list(APPEND numanuma_sources windows_impl.c)
+    add_definitions(-Wall)
+    list(APPEND numanuma_libs numa pthread rt)
 
 endif()
 
-list(APPEND numanuma_sources cpp_wrapper.cpp)
+if(APPLE)
+
+    add_definitions(-Wall)
+    list(APPEND numanuma_libs pthread)
+
+endif()
 
 ########################################################################
-# Build the library
+# Build some tests
 ########################################################################
-add_library(numanuma SHARED ${numanuma_sources})
-target_link_libraries(numanuma ${numanuma_libs})
-set_target_properties(numanuma PROPERTIES DEFINE_SYMBOL "NUMANUMA_DLL_EXPORTS")
+add_executable(simple_test_c simple_test.c)
+target_link_libraries(simple_test_c ${numanuma_libs})
 
-install(TARGETS numanuma
-    LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT runtime # .so file
-    ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel   # .lib file
-    RUNTIME DESTINATION bin              COMPONENT runtime # .dll file
-)
+add_executable(simple_test_cpp simple_test.cpp)
+target_link_libraries(simple_test_cpp ${numanuma_libs})

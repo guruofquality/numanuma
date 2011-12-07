@@ -33,7 +33,16 @@ install(FILES
     COMPONENT devel
 )
 
+install(FILES
+    include/numanuma/bsd_impl.h
+    include/numanuma/linux_impl.h
+    include/numanuma/windows_impl.h
+    include/numanuma/cpp_impl.hpp
+    DESTINATION include/numanuma
+    COMPONENT devel
+)
+
 ########################################################################
-# Build the library
+# Test it
 ########################################################################
-add_subdirectory(lib)
+add_subdirectory(tests)

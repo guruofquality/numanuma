@@ -19,26 +19,6 @@
 
 #include <stddef.h> //size_t
 
-// Generic helper definitions for shared library support
-#if defined _WIN32 || defined __CYGWIN__
-  #define NUMANUMA_HELPER_DLL_IMPORT __declspec(dllimport)
-  #define NUMANUMA_HELPER_DLL_EXPORT __declspec(dllexport)
-#else
-  #if __GNUC__ >= 4
-    #define NUMANUMA_HELPER_DLL_IMPORT __attribute__ ((visibility ("default")))
-    #define NUMANUMA_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
-  #else
-    #define NUMANUMA_HELPER_DLL_IMPORT
-    #define NUMANUMA_HELPER_DLL_EXPORT
-  #endif
-#endif
-
-#ifdef NUMANUMA_DLL_EXPORTS // defined if we are building the NUMANUMA DLL (instead of using it)
-  #define NUMANUMA_API NUMANUMA_HELPER_DLL_EXPORT
-#else
-  #define NUMANUMA_API NUMANUMA_HELPER_DLL_IMPORT
-#endif // NUMANUMA_DLL_EXPORTS
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,7 +27,7 @@ extern "C" {
  * Query the number of nodes on the current system.
  * \return number of nodes or -1 for error
  */
-extern NUMANUMA_API int numanuma__get_num_nodes(void);
+int numanuma__get_num_nodes(void);
 
 //! Opaque handle for the memory alloc/free
 typedef struct numanuma__mem_t *numanuma__mem_handle;
@@ -59,27 +39,27 @@ typedef struct numanuma__mem_t *numanuma__mem_handle;
  * \param hp a handle pointer to use with free
  * \return a pointer to the memory or NULL
  */
-extern NUMANUMA_API void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp);
+void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp);
 
 /*!
  * Free memory allocated by alloc.
  * \param hp a handle pointer created by alloc
  */
-extern NUMANUMA_API void numanuma__mem_free(numanuma__mem_handle *hp);
+void numanuma__mem_free(numanuma__mem_handle *hp);
 
 /*!
  * Get the memory size of a node.
  * \param node the index of a node
  * \return memory size in bytes, -1 for failure
  */
-extern NUMANUMA_API long long numanuma__get_mem_size(const int node);
+long long numanuma__get_mem_size(const int node);
 
 /*!
  * Set the affinity for the calling thread.
  * \param node the index of a node
  * \return -1 for error, 0 for success
  */
-extern NUMANUMA_API int numanuma__set_thread_affinity(const int node);
+int numanuma__set_thread_affinity(const int node);
 
 /*!
  * Set the scheduling priority for the calling thread.
@@ -87,10 +67,26 @@ extern NUMANUMA_API int numanuma__set_thread_affinity(const int node);
  * \param prio a priority between -1.0 and 1.0
  * \return -1 for error, 0 for success
  */
-extern NUMANUMA_API int numanuma__set_thread_priority(const double prio);
+int numanuma__set_thread_priority(const double prio);
+
+//! Get the current time now in ticks
+long long numanuma__get_time_now(void);
+
+//! Get the number of ticks per second
+long long numanuma__get_time_tps(void);
 
 #ifdef __cplusplus
 }
+#endif
+
+#if defined(linux) || defined(__linux) || defined(__linux__)
+    #include <numanuma/linux_impl.h>
+#elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+    #include <numanuma/windows_impl.h>
+#elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+    #include <numanuma/bsd_impl.h>
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+    #include <numanuma/bsd_impl.h>
 #endif
 
 #endif /*INCLUDED_NUMANUMA_H*/
