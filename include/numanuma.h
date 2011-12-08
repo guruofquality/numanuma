@@ -27,7 +27,7 @@ extern "C" {
  * Query the number of nodes on the current system.
  * \return number of nodes or -1 for error
  */
-int numanuma__get_num_nodes(void);
+static int numanuma__get_num_nodes(void);
 
 //! Opaque handle for the memory alloc/free
 typedef struct numanuma__mem_t *numanuma__mem_handle;
@@ -39,27 +39,27 @@ typedef struct numanuma__mem_t *numanuma__mem_handle;
  * \param hp a handle pointer to use with free
  * \return a pointer to the memory or NULL
  */
-void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp);
+static void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp);
 
 /*!
  * Free memory allocated by alloc.
  * \param hp a handle pointer created by alloc
  */
-void numanuma__mem_free(numanuma__mem_handle *hp);
+static void numanuma__mem_free(numanuma__mem_handle *hp);
 
 /*!
  * Get the memory size of a node.
  * \param node the index of a node
  * \return memory size in bytes, -1 for failure
  */
-long long numanuma__get_mem_size(const int node);
+static long long numanuma__get_mem_size(const int node);
 
 /*!
  * Set the affinity for the calling thread.
  * \param node the index of a node
  * \return -1 for error, 0 for success
  */
-int numanuma__set_thread_affinity(const int node);
+static int numanuma__set_thread_affinity(const int node);
 
 /*!
  * Set the scheduling priority for the calling thread.
@@ -67,13 +67,13 @@ int numanuma__set_thread_affinity(const int node);
  * \param prio a priority between -1.0 and 1.0
  * \return -1 for error, 0 for success
  */
-int numanuma__set_thread_priority(const double prio);
+static int numanuma__set_thread_priority(const double prio);
 
 //! Get the current time now in ticks
-long long numanuma__get_time_now(void);
+static long long numanuma__get_time_now(void);
 
 //! Get the number of ticks per second
-long long numanuma__get_time_tps(void);
+static long long numanuma__get_time_tps(void);
 
 #ifdef __cplusplus
 }

@@ -18,10 +18,20 @@
 #define INCLUDED_NUMANUMA_BSD_IMPL_H
 
 #include <stddef.h>
+#include <mach/mach.h> //thread policy
 #include <mach/mach_time.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <stdlib.h> //malloc/free
+#include <unistd.h> //getpagesize
+
+/*
+ * http://developer.apple.com/library/mac/#releasenotes/Performance/RN-AffinityAPI/_index.html
+ * BSD does not have a true node-aware NUMA like linux and windows.
+ * A node consists of a group of CPUs that share an L2 cache.
+ * Outside of cache, main memory is conceptualized as uniform.
+ */
 
 inline int numanuma__get_num_nodes(void){
     int64_t npackages;
@@ -31,24 +41,52 @@ inline int numanuma__get_num_nodes(void){
 }
 
 struct numanuma__mem_t{
-    int node;
     void *mem;
-    size_t size;
 };
 
 inline void *numanuma__mem_alloc(const int node, const size_t size, numanuma__mem_handle *hp){
-    return NULL;
+    void *mem;
+    if (posix_memalign(&mem, getpagesize(), size) != 0) return NULL;
+    if (mem == NULL) return NULL;
+
+    *hp = (struct numanuma__mem_t *)malloc(sizeof(struct numanuma__mem_t));
+    if (*hp == NULL) return NULL;
+    (*hp)->mem = mem;
+    return (*hp)->mem;
 }
 
 inline void numanuma__mem_free(numanuma__mem_handle *hp){
-    return;
+    free((*hp)->mem);
+    free(*hp);
 }
 
 inline long long numanuma__get_mem_size(const int node){
+    //divide by num nodes to emulate node-specific memory
+    const int num_nodes = numanuma__get_num_nodes();
+    if (num_nodes < 0) return -1;
+
+    //query the size of the cachesize entries
+    size_t size = 0;
+    if (sysctlbyname("hw.cachesize", NULL, &size, NULL, 0) != 0) return -1;
+
+    //query the cachesizes
+    uint64_t cachesize[size/sizeof(uint64_t)];
+    const int ret = sysctlbyname("hw.cachesize", cachesize, &size, NULL, 0);
+    if (ret == 0 && size >= sizeof(uint64_t)) return cachesize[0]/num_nodes;
     return -1;
 }
 
 inline int numanuma__set_thread_affinity(const int node){
+    #ifdef THREAD_AFFINITY_POLICY
+    struct thread_affinity_policy ap;
+    ap.affinity_tag = node;
+    if (thread_policy_set(
+        mach_thread_self(),
+        THREAD_AFFINITY_POLICY,
+        (thread_policy_t) &ap,
+        THREAD_AFFINITY_POLICY_COUNT
+    ) == 0) return 0;
+    #endif
     return -1;
 }
 

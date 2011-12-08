@@ -20,6 +20,7 @@
 #include <numa.h>
 #include <pthread.h>
 #include <time.h>
+#include <stdlib.h> //malloc/free
 
 inline int numanuma__get_num_nodes(void){
     if (numa_available() == -1) return -1;
@@ -27,7 +28,6 @@ inline int numanuma__get_num_nodes(void){
 }
 
 struct numanuma__mem_t{
-    int node;
     void *mem;
     size_t size;
 };
@@ -39,7 +39,6 @@ inline void *numanuma__mem_alloc(const int node, const size_t size, numanuma__me
     if (mem == NULL) return NULL;
     *hp = (struct numanuma__mem_t *)malloc(sizeof(struct numanuma__mem_t));
     if (*hp == NULL) return NULL;
-    (*hp)->node = node;
     (*hp)->mem = mem;
     (*hp)->size = size;
     return (*hp)->mem;

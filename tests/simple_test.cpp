@@ -25,7 +25,7 @@ void test_numa(void){
         std::cout << "  mem size " << numanuma::get_mem_size(n) << " bytes" << std::endl;
         std::cout << "  allocate some mem ";
         numanuma::mem *m = numanuma::mem::make(n, 1);
-        std::cout << size_t(m) << std::endl;
+        std::cout << size_t(m->get()) << std::endl;
         delete m;
         std::cout << "  setting thread affinity: ";
         try{

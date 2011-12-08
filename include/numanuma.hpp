@@ -22,7 +22,7 @@
 namespace numanuma{
 
     //! Wrapper to get the number of NUMA nodes
-    size_t get_num_nodes(void);
+    static size_t get_num_nodes(void);
 
     //! Wrapper to allocate and manage NUMA memory
     struct mem{
@@ -32,19 +32,19 @@ namespace numanuma{
     };
 
     //! Wrapper to get the available node memory
-    unsigned long long get_mem_size(const int node);
+    static unsigned long long get_mem_size(const int node);
 
     //! Wrapper to set the caller thread's affinity
-    void set_thread_affinity(const int node);
+    static void set_thread_affinity(const int node);
 
     //! Wrapper to set the caller thread's priority
-    void set_thread_priority(const double prio);
+    static void set_thread_priority(const double prio);
 
     //! Wrapper to get the current time now in ticks
-    long long get_time_now(void);
+    static long long get_time_now(void);
 
     //! Wrapper to get the number of ticks per second
-    long long get_time_tps(void);
+    static long long get_time_tps(void);
 
 } //namespace numanuma
 

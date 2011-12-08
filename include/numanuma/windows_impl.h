@@ -18,6 +18,7 @@
 #define INCLUDED_NUMANUMA_WINDOWS_IMPL_H
 
 #include <windows.h>
+#include <stdlib.h> //malloc/free
 
 __inline int numanuma__get_num_nodes(void){
     ULONG num;
@@ -26,7 +27,6 @@ __inline int numanuma__get_num_nodes(void){
 }
 
 struct numanuma__mem_t{
-    int node;
     void *mem;
     size_t size;
 };
@@ -45,7 +45,6 @@ __inline void *numanuma__mem_alloc(const int node, const size_t size, numanuma__
 
     *hp = (struct numanuma__mem_t *)malloc(sizeof(struct numanuma__mem_t));
     if (*hp == NULL) return NULL;
-    (*hp)->node = node;
     (*hp)->mem = mem;
     (*hp)->size = size;
     return (*hp)->mem;

@@ -17,25 +17,18 @@
 ########################################################################
 # Check for support
 ########################################################################
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
+find_package(NumaNuma)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)
-    list(APPEND numanuma_libs numa pthread rt)
-
-endif()
-
-if(APPLE)
-
-    add_definitions(-Wall)
-    list(APPEND numanuma_libs pthread)
-
 endif()
 
 ########################################################################
 # Build some tests
 ########################################################################
 add_executable(simple_test_c simple_test.c)
-target_link_libraries(simple_test_c ${numanuma_libs})
+target_link_libraries(simple_test_c ${NUMANUMA_LIBRARIES})
 
 add_executable(simple_test_cpp simple_test.cpp)
-target_link_libraries(simple_test_cpp ${numanuma_libs})
+target_link_libraries(simple_test_cpp ${NUMANUMA_LIBRARIES})
