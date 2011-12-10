@@ -58,6 +58,12 @@ __inline void numanuma__mem_free(numanuma__mem_handle *hp){
    free(*hp);
 }
 
+__inline size_t numanuma__get_page_size(void){
+    SYSTEM_INFO SystemInfo;
+    GetSystemInfo (&SystemInfo);
+    return SystemInfo.dwPageSize;
+}
+
 __inline long long numanuma__get_mem_size(const int node){
     ULONGLONG avail;
     #if _WIN32_WINNT >= 0x0601

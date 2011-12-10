@@ -60,6 +60,10 @@ inline void numanuma__mem_free(numanuma__mem_handle *hp){
     free(*hp);
 }
 
+inline size_t numanuma__get_page_size(void){
+    return getpagesize();
+}
+
 inline long long numanuma__get_mem_size(const int node){
     //divide by num nodes to emulate node-specific memory
     const int num_nodes = numanuma__get_num_nodes();

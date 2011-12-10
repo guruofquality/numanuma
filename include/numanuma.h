@@ -48,6 +48,12 @@ static void *numanuma__mem_alloc(const int node, const size_t size, numanuma__me
 static void numanuma__mem_free(numanuma__mem_handle *hp);
 
 /*!
+ * Get the page size of system memory.
+ * \return the number of bytes in a page
+ */
+static size_t numanuma__get_page_size(void);
+
+/*!
  * Get the memory size of a node.
  * \param node the index of a node
  * \return memory size in bytes, -1 for failure

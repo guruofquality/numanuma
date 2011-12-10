@@ -31,6 +31,9 @@ namespace numanuma{
         virtual size_t len(void) = 0;
     };
 
+    //! Wrapper to get the system page size
+    static size_t get_page_size(void);
+
     //! Wrapper to get the available node memory
     static unsigned long long get_mem_size(const int node);
 

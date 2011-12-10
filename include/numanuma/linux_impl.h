@@ -49,6 +49,10 @@ inline void numanuma__mem_free(numanuma__mem_handle *hp){
     free(*hp);
 }
 
+inline size_t numanuma__get_page_size(void){
+    return numa_pagesize();
+}
+
 inline long long numanuma__get_mem_size(const int node){
     if (numa_available() == -1) return -1;
     return numa_node_size64(node, NULL);

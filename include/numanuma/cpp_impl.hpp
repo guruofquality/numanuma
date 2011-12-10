@@ -54,6 +54,10 @@ inline numanuma::mem *numanuma::mem::make(const int node, const size_t size){
     return new _numanuma::mem_impl(node, size);
 }
 
+inline size_t numanuma::get_page_size(void){
+    return numanuma__get_page_size();
+}
+
 inline unsigned long long numanuma::get_mem_size(const int node){
     long long ret = numanuma__get_mem_size(node);
     if (ret == -1) throw std::runtime_error("numanuma::get_mem_size fail");

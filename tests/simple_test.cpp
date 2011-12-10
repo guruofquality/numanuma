@@ -39,6 +39,8 @@ void test_numa(void){
 }
 
 int main(void){
+    std::cout << "page size " << numanuma::get_page_size() << std::endl;
+
     try{
         numanuma::get_num_nodes();
         test_numa();
