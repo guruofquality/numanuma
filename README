@@ -1,5 +1,5 @@
 ########################################################################
-# NUMANUMA - A cross-platform NUMA API abstraction layer
+# NUMANUMA - A cross-platform node-aware NUMA API abstraction layer
 ########################################################################
 
 Motivation:
@@ -13,6 +13,12 @@ This library aims to provide a cross platform access for
 - thread scheduling: alter the priority of a thread
 - memory allocation: allocate memory on a specific node
 
+Implementation:
+This "library" is implemented 100% in C header files,
+just include it into your project and link against the libraries below.
+There is also a C++ wrapper for those who are namespace/object oriented.
+
 Requirements:
-This library is implemented on top of libnuma and libpthread for linux,
-and standard windows.h stuff when building in MSVC.
+Linux: librt, libnuma, and libpthread
+BSD/OSX: libpthread and various mach library
+Windows: standard windows.h stuff

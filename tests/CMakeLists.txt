@@ -17,7 +17,7 @@
 ########################################################################
 # Check for support
 ########################################################################
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(NumaNuma)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
