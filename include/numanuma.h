@@ -90,7 +90,7 @@ static long long numanuma__get_time_tps(void);
 #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
     #include <numanuma/windows_impl.h>
 #elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
-    #include <numanuma/bsd_impl.h>
+    #include <numanuma/osx_impl.h>
 #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
     #include <numanuma/bsd_impl.h>
 #endif

@@ -35,6 +35,7 @@ install(FILES
 
 install(FILES
     include/numanuma/bsd_impl.h
+    include/numanuma/osx_impl.h
     include/numanuma/linux_impl.h
     include/numanuma/windows_impl.h
     include/numanuma/cpp_impl.hpp
