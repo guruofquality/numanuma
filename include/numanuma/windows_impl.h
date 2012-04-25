@@ -75,8 +75,25 @@ __inline long long numanuma__get_mem_size(const int node){
 }
 
 __inline int numanuma__set_thread_affinity(const int node){
-    const DWORD_PTR mask = 1 << node;
-    if (SetThreadAffinityMask(GetCurrentThread(), mask)) return 0;
+#if _WIN32_WINNT >= 0x0601
+    GROUP_AFFINITY groupAffinity;
+    if (GetNumaNodeProcessorMaskEx(static_cast<USHORT>(node), &groupAffinity))
+    {
+        if (SetThreadAffinityMask(GetCurrentThread(), static_cast<DWORD_PTR>(groupAffinity.Mask)))
+        {
+            return 0;
+        }
+    }
+#else
+    ULONGLONG processorMask(0);
+    if (GetNumaNodeProcessorMask(static_cast<UCHAR>(node), &processorMask))
+    {
+        if (SetThreadAffinityMask(GetCurrentThread(), static_cast<DWORD_PTR>(processorMask)))
+        {
+            return 0;
+        }
+    }
+#endif
     return -1;
 }
 
