@@ -29,6 +29,7 @@ namespace numanuma{
         static mem *make(const int node, const size_t size);
         virtual void *get(void) = 0;
         virtual size_t len(void) = 0;
+        virtual ~mem(void){}
     };
 
     //! Wrapper to get the system page size
