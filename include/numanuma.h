@@ -23,6 +23,9 @@
 extern "C" {
 #endif
 
+//! No thread affinity for a node, used to reset
+#define NUMANUMA_NODE_NONE ((int)-1)
+
 /*!
  * Query the number of nodes on the current system.
  * \return number of nodes or -1 for error
@@ -62,6 +65,7 @@ static long long numanuma__get_mem_size(const int node);
 
 /*!
  * Set the affinity for the calling thread.
+ * To reset the affinity, pass NUMANUMA_NODE_NONE.
  * \param node the index of a node
  * \return -1 for error, 0 for success
  */

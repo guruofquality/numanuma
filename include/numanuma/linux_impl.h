@@ -59,6 +59,9 @@ inline long long numanuma__get_mem_size(const int node){
 }
 
 inline int numanuma__set_thread_affinity(const int node){
+    if (node == NUMANUMA_NODE_NONE){
+        return numa_run_on_node(-1);
+    }
     return numa_run_on_node(node);
 }
 

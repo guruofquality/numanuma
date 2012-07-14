@@ -84,6 +84,9 @@ inline int numanuma__set_thread_affinity(const int node){
     #ifdef THREAD_AFFINITY_POLICY
     struct thread_affinity_policy ap;
     ap.affinity_tag = node;
+    if (node == NUMANUMA_NODE_NONE){
+        ap.affinity_tag = THREAD_AFFINITY_TAG_NULL;
+    }
     if (thread_policy_set(
         mach_thread_self(),
         THREAD_AFFINITY_POLICY,

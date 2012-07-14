@@ -75,6 +75,10 @@ __inline long long numanuma__get_mem_size(const int node){
 }
 
 __inline int numanuma__set_thread_affinity(const int node){
+
+    //TODO how to reset the affinity to all nodes?
+    if (node == NUMANUMA_NODE_NONE) return -1;
+
 #if _WIN32_WINNT >= 0x0601
     GROUP_AFFINITY groupAffinity;
     if (GetNumaNodeProcessorMaskEx((USHORT)node, &groupAffinity))
