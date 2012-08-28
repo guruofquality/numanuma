@@ -20,5 +20,6 @@ There is also a C++ wrapper for those who are namespace/object oriented.
 
 Requirements:
 Linux: librt, libnuma, and libpthread
-BSD/OSX: libpthread and various mach library
+OSX: libpthread and various mach library
 Windows: standard windows.h stuff
+Others: none
